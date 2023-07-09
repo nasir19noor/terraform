@@ -10,6 +10,6 @@ variable "zone"  {
   default = "asia-southeast1-b"
 }
 
-variable "cidr_ip" {
+variable "cidr" {
   default = "10.1.0.0/16"
 }
