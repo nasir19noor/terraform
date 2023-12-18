@@ -1,15 +1,17 @@
 resource "aws_vpc" "dev" {
- cidr_block = "10.1.0.0/16"
- 
+ cidr_block = var.dev_cidrs
+ enable_dns_hostnames = true
+ enable_dns_support = true
  tags = {
-   Name = "Nasir Terraform VPC Dev"
+   Name = "${var.project}-dev"
  }
 }
 
 resource "aws_vpc" "prod" {
- cidr_block = "10.2.0.0/16"
- 
+ cidr_block = var.prod_cidrs
+ enable_dns_hostnames = true
+ enable_dns_support = true
  tags = {
-   Name = "Nasir Terraform VPC Prod"
+   Name = "${var.project}-prod"
  }
 }

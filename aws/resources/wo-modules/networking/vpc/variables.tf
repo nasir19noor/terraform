@@ -1,3 +1,27 @@
+variable "project" {
+ type        = string
+ description = "Project Name"
+ default     = "Terraform"
+}
+
+variable "dev_cidrs" {
+ type        = string
+ description = "cidrs dev"
+ default     = "10.1.0.0/16"
+}
+
+variable "prod_cidrs" {
+ type        = string
+ description = "cidrs prod"
+ default     = "10.2.0.0/16"
+}
+
+variable "azs" {
+ type        = list(string)
+ description = "Availability Zones"
+ default     = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+}
+
 variable "dev_public_subnet_cidrs" {
  type        = list(string)
  description = "Public Subnet CIDR values"
