@@ -1,17 +1,9 @@
-resource "aws_vpc" "dev" {
- cidr_block = var.dev_cidrs
+resource "aws_vpc" "vpc" {
+ cidr_block = var.cidrs
  enable_dns_hostnames = true
  enable_dns_support = true
  tags = {
-   Name = "${var.project}-dev"
+   Name = "${var.project}-${var.env}"
  }
 }
 
-resource "aws_vpc" "prod" {
- cidr_block = var.prod_cidrs
- enable_dns_hostnames = true
- enable_dns_support = true
- tags = {
-   Name = "${var.project}-prod"
- }
-}
