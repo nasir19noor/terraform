@@ -1,3 +1,3 @@
 resource "aws_s3_bucket" "backend" {
-  bucket = "nasir-terraform-wo-module"
+  bucket = "nasir-terraform-wo-module-prod"
 }
