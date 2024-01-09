@@ -6,3 +6,4 @@ data "terraform_remote_state" "vpc" {
     region = "ap-southeast-1"
   }
 }
+

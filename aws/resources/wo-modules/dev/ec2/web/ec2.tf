@@ -14,7 +14,9 @@ resource "aws_instance" "dev_web" {
   instance_type = var.instance_type[0]
   subnet_id     = data.terraform_remote_state.vpc.outputs.public_subnets[1]
   key_name = aws_key_pair.dev_web.key_name
+  vpc_security_group_ids = [aws_security_group.dev_web.id]
   tags = {
    Name = "${var.project}-dev-web"
  }
 }
+
