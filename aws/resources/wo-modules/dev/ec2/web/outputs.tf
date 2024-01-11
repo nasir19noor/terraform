@@ -6,3 +6,7 @@ output "private_key" {
 output "security_group" {
   value     = aws_security_group.dev_web.id
 }
+
+output "ec2_id" {
+  value     = aws_instance.dev_web.id
+}
