@@ -15,6 +15,7 @@ resource "aws_instance" "dev_web" {
   subnet_id     = data.terraform_remote_state.vpc.outputs.public_subnets[1]
   key_name = aws_key_pair.dev_web.key_name
   vpc_security_group_ids = [aws_security_group.dev_web.id]
+  iam_instance_profile = "${aws_iam_instance_profile.dev_web_profile.name}"
   user_data = file("userdata.tpl")
   tags = {
    Name = "${var.project}-dev-web"
