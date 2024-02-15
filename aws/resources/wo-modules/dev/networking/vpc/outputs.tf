@@ -14,6 +14,11 @@ output "private_subnets" {
   value       = aws_subnet.private_subnets[*].id
 }
 
+output "data_subnets" {
+  description = "The ID of the Private Subnet"
+  value       = aws_subnet.data_subnets[*].id
+}
+
 output "eip_ngw" {
   description = "The ID of the VPC"
   value       = try(aws_eip.ngw.public_ip, null)

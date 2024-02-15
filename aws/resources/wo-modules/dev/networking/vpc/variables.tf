@@ -33,3 +33,9 @@ variable "private_subnet_cidrs" {
  description = "Private Subnet CIDR values"
  default     = ["10.1.11.0/24", "10.1.12.0/24", "10.1.13.0/24"]
 }
+
+variable "data_subnet_cidrs" {
+ type        = list(string)
+ description = "Data Subnet CIDR values"
+ default     = ["10.1.21.0/24", "10.1.22.0/24", "10.1.23.0/24"]
+}

@@ -17,3 +17,13 @@ resource "aws_subnet" "private_subnets" {
    Name = "${var.project}-${var.env}_private_subnet-${count.index + 1}"
  }
 }
+
+resource "aws_subnet" "data_subnets" {
+ count      = length(var.data_subnet_cidrs)
+ vpc_id     = aws_vpc.vpc.id
+ cidr_block = element(var.data_subnet_cidrs, count.index)
+ availability_zone = element(var.azs, count.index)
+ tags = {
+   Name = "${var.project}-${var.env}_data_subnet-${count.index + 1}"
+ }
+}
