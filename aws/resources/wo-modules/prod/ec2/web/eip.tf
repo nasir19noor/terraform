@@ -1,4 +1,4 @@
-resource "aws_eip" "dev_web" {
+resource "aws_eip" "prod_web" {
   vpc = true
-  instance = aws_instance.dev_web.id
+  instance = aws_instance.prod_web.id
 }

@@ -1,5 +1,5 @@
-resource "aws_iam_role" "dev_web_role" {
-  name = "dev_web_role"
+resource "aws_iam_role" "prod_web_role" {
+  name = "prod_web_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -15,29 +15,29 @@ resource "aws_iam_role" "dev_web_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "dev_web_attach_policy" {
-  role       = aws_iam_role.dev_web_role.name
+resource "aws_iam_role_policy_attachment" "prod_web_attach_policy" {
+  role       = aws_iam_role.prod_web_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "dev_web_attach_policy_2" {
-  role       = aws_iam_role.dev_web_role.name
+resource "aws_iam_role_policy_attachment" "prod_web_attach_policy_2" {
+  role       = aws_iam_role.prod_web_role.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess" 
 }
 
-resource "aws_iam_role_policy_attachment" "dev_web_attach_policy_3" {
-  role       = aws_iam_role.dev_web_role.name
+resource "aws_iam_role_policy_attachment" "prod_web_attach_policy_3" {
+  role       = aws_iam_role.prod_web_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess" 
 }
 
-resource "aws_iam_instance_profile" "dev_web_profile" {
-  name = "dev_web_profile"
-  role = "${aws_iam_role.dev_web_role.name}"
+resource "aws_iam_instance_profile" "prod_web_profile" {
+  name = "prod_web_profile"
+  role = "${aws_iam_role.prod_web_role.name}"
 }
 
-resource "aws_iam_role_policy" "dev_web_policy" {
-  name = "dev_web_policy"
-  role = "${aws_iam_role.dev_web_role.id}"
+resource "aws_iam_role_policy" "prod_web_policy" {
+  name = "prod_web_policy"
+  role = "${aws_iam_role.prod_web_role.id}"
 
   policy = <<EOF
 {

@@ -1,15 +1,15 @@
-resource "aws_security_group" "dev_be_lb" {
-  name                   = "${var.project}-dev_be_lb"
-  description            = "dev_be-SG"
+resource "aws_security_group" "prod_be_lb" {
+  name                   = "${var.project}-prod_be_lb"
+  description            = "prod_be-SG"
   vpc_id                 = data.terraform_remote_state.vpc.outputs.vpc_id
 
   tags = {
-    Name = "${var.project}-dev_be_lb"
+    Name = "${var.project}-prod_be_lb"
   }
 }
 
 resource "aws_security_group_rule" "http" {
-  security_group_id = aws_security_group.dev_be_lb.id
+  security_group_id = aws_security_group.prod_be_lb.id
   type              = "ingress"
 
   cidr_blocks      = ["10.1.0.0/16"]
@@ -22,7 +22,7 @@ resource "aws_security_group_rule" "http" {
 }
 
 resource "aws_security_group_rule" "https" {
-  security_group_id = aws_security_group.dev_be_lb.id
+  security_group_id = aws_security_group.prod_be_lb.id
   type              = "ingress"
 
   cidr_blocks      = ["10.1.0.0/16"]
@@ -35,7 +35,7 @@ resource "aws_security_group_rule" "https" {
 }
 
 resource "aws_security_group_rule" "outbond" {
-  security_group_id = aws_security_group.dev_be_lb.id
+  security_group_id = aws_security_group.prod_be_lb.id
   type              = "egress"
 
   cidr_blocks      = ["0.0.0.0/0"]

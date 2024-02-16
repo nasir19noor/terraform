@@ -30,5 +30,5 @@ variable "instance_type" {
 
 variable "key_name" {
  type        = string
- default     = "dev_web"
+ default     = "prod_web"
 }

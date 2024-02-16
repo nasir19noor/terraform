@@ -43,13 +43,13 @@ resource "aws_route_table_association" "public_subnet_asso" {
  route_table_id = aws_route_table.public.id
 }
 
-resource "aws_route_table_association" "dev_private_subnet_asso" {
+resource "aws_route_table_association" "prod_private_subnet_asso" {
  count = length(var.private_subnet_cidrs)
  subnet_id      = element(aws_subnet.private_subnets[*].id, count.index)
  route_table_id = aws_route_table.private.id
 }
 
-resource "aws_route_table_association" "dev_data_subnet_asso" {
+resource "aws_route_table_association" "prod_data_subnet_asso" {
  count = length(var.data_subnet_cidrs)
  subnet_id      = element(aws_subnet.data_subnets[*].id, count.index)
  route_table_id = aws_route_table.data.id

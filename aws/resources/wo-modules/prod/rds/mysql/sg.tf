@@ -1,15 +1,15 @@
-resource "aws_security_group" "dev_mysql" {
-  name                   = "${var.project}-dev_mysql"
-  description            = "dev_mysql-SG"
+resource "aws_security_group" "prod_mysql" {
+  name                   = "${var.project}-prod_mysql"
+  description            = "prod_mysql-SG"
   vpc_id                 = data.terraform_remote_state.vpc.outputs.vpc_id
 
   tags = {
-    Name = "${var.project}-dev_mysql"
+    Name = "${var.project}-prod_mysql"
   }
 }
 
 resource "aws_security_group_rule" "mysql" {
-  security_group_id = aws_security_group.dev_mysql.id
+  security_group_id = aws_security_group.prod_mysql.id
   type              = "ingress"
 
   cidr_blocks      = ["10.1.0.0/16"]
@@ -22,7 +22,7 @@ resource "aws_security_group_rule" "mysql" {
 
 
 resource "aws_security_group_rule" "outbond" {
-  security_group_id = aws_security_group.dev_mysql.id
+  security_group_id = aws_security_group.prod_mysql.id
   type              = "egress"
 
   cidr_blocks      = ["0.0.0.0/0"]
