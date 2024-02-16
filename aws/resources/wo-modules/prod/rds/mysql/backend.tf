@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket         = "nasir-terraform-wo-module"
-    key            = "dev/networking/vpc/terraform.tfstate"
+    key            = "dev/rds/mysql/terraform.tfstate"
     region         = "ap-southeast-1"
   }
 }
