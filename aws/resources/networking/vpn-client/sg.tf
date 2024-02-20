@@ -1,6 +1,6 @@
 resource "aws_security_group" "client_vpn_sg" {
   name   = "rpp-client-vpn-sg"
-  vpc_id = data.terraform_remote_state.prod_networking_vpc.outputs.vpc_id
+  vpc_id = "vpc-0734ed2d81043d90c"
   description = "Allow inbound traffic from port 443, to the VPN"
  
   ingress {
@@ -18,8 +18,4 @@ resource "aws_security_group" "client_vpn_sg" {
    cidr_blocks      = ["0.0.0.0/0"]
    ipv6_cidr_blocks = ["::/0"]
   }
-  tags = merge(
-    { Name = "rpp-client-vpn-sg" },
-    module.required_tags.tags
-  )
 }

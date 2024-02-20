@@ -6,7 +6,8 @@ resource "aws_ec2_client_vpn_endpoint" "rpp" {
   dns_servers            = var.dns_servers
   self_service_portal    = local.self_service_portal
   security_group_ids     = [aws_security_group.client_vpn_sg.id]
-  vpc_id                 = data.terraform_remote_state.prod_networking_vpc.outputs.vpc_id
+  transport_protocol     = var.transport_protocol
+  vpc_id                 = "vpc-0734ed2d81043d90c"
 
   authentication_options {
     type                       = var.authentication_type
@@ -23,12 +24,12 @@ resource "aws_ec2_client_vpn_endpoint" "rpp" {
 
 resource "aws_ec2_client_vpn_network_association" "client_vpn_association_private" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.rpp.id
-  subnet_id              = data.terraform_remote_state.prod_networking_vpc.outputs.app_subnet_ids[0]
+  subnet_id              = "subnet-0a81ab3974f428260"
 }
 
 resource "aws_ec2_client_vpn_network_association" "client_vpn_association_public" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.rpp.id
-  subnet_id              = data.terraform_remote_state.prod_networking_vpc.outputs.vpn_subnet_ids[0]
+  subnet_id              = "subnet-0eed122751ceb5d7a"
 }
 
 resource "aws_ec2_client_vpn_authorization_rule" "authorization_rule" {

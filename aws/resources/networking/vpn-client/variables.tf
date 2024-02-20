@@ -9,3 +9,4 @@ variable "logs_retention" {}
 variable "authentication_type" {}
 variable "split_tunnel" {}
 variable "enable_self_service_portal" {}
+variable "transport_protocol" {}
