@@ -1,91 +1,54 @@
-#### provider Variables defined #######
-variable "region" {
-  type        = string
-  description = "Name of the region to select"
-  default     = "ap-southeas-1"
+variable "cluster-name" {
+  description = "Enter eks cluster name - example like eks-demo, eks-dev etc"
+  type    = string
+  default = "terraform_eks_cluster"
 }
 
-##### VPC Variables defined #######
-
-variable "vpc_name" {
-  type        = string
-  description = "Name to be used on all the resources as identifier"
+variable "eks-worker-ami" {
+  description = "Please visit here - https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html and select your pre-baked AMI depending on the cluster version and the region you are planning to launch cluster into"
+  default = "ami-0a67d2933aa973c36"
 }
+variable "volume_size" {
+  description = "Enter size of the volume"
+  default     = "20"
+}
+
+# In eks worker node instance type directly affects the number of PODs can run on a Node. Choose wisely.
+# https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt
+
+variable "worker-node-instance_type" {
+  description = "enter worker node instance type"
+  default = "t2.micro"
+}
+
+variable "ssh_key_pair" {
+   description = "Enter SSH keypair name that already exist in the account"
+
+}
+
 variable "public_subnets" {
-  type        = list(string)
-  description = "A list of public subnets inside the VPC"
-  default     = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+    type    = list
+    description = "you can replace these values as per your choice of subnet range"
+    default = ["10.15.0.0/22", "10.15.4.0/22", "10.15.8.0/22"]
 }
+
 variable "private_subnets" {
-  type        = list(string)
-  description = "A list of private subnets inside the VPC"
-  default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+    type    = list
+    description = "you can replace these values as per your choice of subnet range"
+    default = ["10.15.12.0/22", "10.15.16.0/22", "10.15.20.0/22"]
 }
 
-variable "azs" {
-  type        = list(string)
-  description = "A list of availability zones specified as argument to this module"
-  default     = ["ap-southeas-1a", "ap-southeas-1b", "ap-southeas-1c"]
-}
-variable "enable_nat_gateway" {
-  type        = bool
-  description = "Should be true if you want to provision NAT Gateways for each of your private networks"
-  default     = "false"
-}
-variable "enable_vpn_gateway" {
-  type        = bool
-  description = "Should be true if you want to create a new VPN Gateway resource and attach it to the VPC"
-  default     = "false"
+variable "aws_profile" {
+  default = "eks"
+  description = "configure AWS CLI profile"
 }
 
-variable "one_nat_gateway_per_az" {
-  type        = bool
-  description = "Should be true if you want only one NAT Gateway per availability zone"
-  default     = "false"
-}
-variable "enable_dns_hostnames" {
-  type        = bool
-  description = "Should be true to enable DNS hostnames in the VPC"
-  default     = "true"
-}
-variable "enable_dns_support" {
-  type        = bool
-  description = "Should be true to enable DNS support in the VPC"
-  default     = "true"
-}
-variable "vpc_tags" {
-  type = map(string)
-  default = {
-    Terraform   = "true"
-    Environment = "dev"
-  }
+variable "eks_version" {
+   description = "kubernetes cluster version provided by AWS EKS - It would be like 1.12 or 1.13"
+   default = "1.29"
 }
 
-
-##### EkS Cluster Variables defined #######
-variable "cluster_name" {
-  type        = string
-  description = "Name of the EKS cluster"
-}
-
-variable "cluster_endpoint_private_access" {
-  type        = bool
-  description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled"
-  default     = "true"
-}
-variable "cluster_endpoint_public_access" {
-  type        = bool
-  description = "Indicates whether or not the Amazon EKS public API server endpoint is enabled"
-  default     = "false"
-}
-variable "enable_irsa" {
-  type        = bool
-  description = "Determines whether to create an OpenID Connect Provider for EKS to enable IRSA"
-  default     = "true"
-}
-variable "eks_tags" {
-  type = map(string)
-  default = {
-    Environment = "dev"
-  }
+variable "region" {
+   description = "Enter region you want to create EKS cluster in"
+   default = "apsoutheast-1"
 }
