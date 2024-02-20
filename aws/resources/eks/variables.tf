@@ -21,9 +21,9 @@ variable "worker-node-instance_type" {
   default = "t2.micro"
 }
 
-variable "ssh_key_pair" {
-   description = "Enter SSH keypair name that already exist in the account"
-
+variable "key_name" {
+    type        = string
+    default     = "ekc_cluster"
 }
 
 variable "public_subnets" {

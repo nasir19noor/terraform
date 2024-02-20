@@ -101,3 +101,13 @@ resource "aws_eks_cluster" "eks-cluster" {
     "aws_iam_role_policy_attachment.eks-cluster-AmazonEKSServicePolicy",
   ]
 }
+
+resource "aws_key_pair" "eks_cluster" {
+  key_name = var.key_name
+  public_key = tls_private_key.eks_cluster.public_key_openssh
+}
+
+resource "tls_private_key" "eks_cluster" {
+  algorithm = "RSA"
+  rsa_bits = 4096
+}

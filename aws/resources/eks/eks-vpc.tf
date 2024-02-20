@@ -10,12 +10,9 @@ resource "aws_vpc" "eks" {
   cidr_block = "10.15.0.0/19"
   enable_dns_hostnames = true
 
-  tags = "${
-    map(
-     "Name", "eks-vpc",
-     "kubernetes.io/cluster/${var.cluster-name}", "shared",
-    )
-  }"
+  tags = {
+   Name = "eks_cluster"
+  }
 }
 
 ## EKS public subnets
