@@ -10,7 +10,7 @@ variable "eks-worker-ami" {
 }
 variable "volume_size" {
   description = "Enter size of the volume"
-  default     = "20"
+  default     = "10"
 }
 
 # In eks worker node instance type directly affects the number of PODs can run on a Node. Choose wisely.
@@ -50,5 +50,5 @@ variable "eks_version" {
 
 variable "region" {
    description = "Enter region you want to create EKS cluster in"
-   default = "apsoutheast-1"
+   default = "ap-southeast-1"
 }

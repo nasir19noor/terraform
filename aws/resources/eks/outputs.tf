@@ -57,3 +57,8 @@ output "config-map-aws-auth" {
 output "kubeconfig" {
   value = "${local.kubeconfig}"
 }
+
+output "private_key" {
+  value     = tls_private_key.eks_cluster.private_key_pem
+  sensitive = true
+}
