@@ -7,7 +7,7 @@ locals {
 }
 
 module "zones" {
-  source = "../../modules/route53/zones"
+  source = "../../../modules/route53/zones"
 
   zones = {
 
