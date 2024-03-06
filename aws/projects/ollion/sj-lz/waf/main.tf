@@ -1,9 +1,10 @@
-provider "aws" {
-  region = var.region
+locals {
+  account_id_dns_hub = "647459380434"
+  lz_config          = yamldecode(file("../lzconfig.yaml"))
 }
 
 module "waf" {
-  source = "../../../modules/waf"
+  source = "../../../../modules/waf"
 
   visibility_config = {
     cloudwatch_metrics_enabled = false

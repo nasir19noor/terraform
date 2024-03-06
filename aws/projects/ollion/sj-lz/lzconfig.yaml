@@ -1,0 +1,251 @@
+global:
+  home_region: "ap-southeast-1"
+  lz_state_bucket: "aws-lz-sj-terraform-states-ap-southeast-1"
+  lz_state_locking_dynamodb_table: "aws-lz-sj-terraform-state-lock"
+  org_lz_state_bucket: "aws-lz-terraform-states-ap-southeast-1"
+  org_lz_state_locking_dynamodb_table: "aws-lz-terraform-state-lock"
+  switch_role_to_assume: "OrganizationAccountAccessRole"
+bootstrap:
+  bootstrap_ou_name: "Bootstrap"
+  bootstrap_account_name: "LZ CICD"
+  bootstrap_account_email: "awslz-devops+bootstrap1@cldcvr.com"
+  cicd:
+    git_repo_id: "ollionorg/aws-lz-sj-test"
+    git_repo_name: "aws-lz-sj-test"
+    git_branch: "sj-lz-deploy"
+    s3_bucket_prefix: "aws-lz-sj"
+org:
+  common:
+    target_regions:
+      - "ap-southeast-1"
+    object_lock_enabled: false
+    object_lock_conf:
+      default_retention_mode: "COMPLIANCE"
+      default_retention_days: 11
+  logging:
+    s3_bucket_prefix: "logging-aws-lz-20231610"
+    standard_ia_days: 30
+    glacier_days: 60
+  shared_services:
+    ses_sender_email_address: "leslie.dsouza@cldcvr.com"
+    ses_recipients_email_addresses:
+      - "leslie.dsouza@ollion.com"
+    sns_recipients_email_addresses:
+      - "leslie.dsouza@ollion.com"
+  billing:
+    report_name: "main-report"
+    time_unit: "HOURLY"
+  cloudtrail:
+    name: "main"
+    multi_region_trail: true
+    include_global_service_events: true
+  infra_cicd:
+    infra_cicd_enabled: true
+    git_repo_id: "ollionorg/aws-lz"
+    git_repo_name: "aws-lz"
+    git_branch: "infra-cicd"
+  guardduty:
+    finding_publishing_frequency: "FIFTEEN_MINUTES"
+  securityhub:
+    securityhub_enabled: true
+    enable_aws_foundations_security: true
+    enable_cis_standard_v_1_2_0: true
+    enable_cis_standard_v_1_4_0: false
+    enable_pci_dss_standard: false
+    enable_nist_standard: false
+  permission_sets_principal:
+    cto_operations_group: "awslz-cloud_operations@ollion.com"
+    cto_core_networking_operations_group: "awslz-network_operations@ollion.com"
+    cto_security_operations_group: "awslz-security_operations@ollion.com"
+    cto_elevated_security_operations_group: "awslz-core_security_operations@ollion.com"
+    audit_and_compliance_operations_group: "awslz-audit_operations@ollion.com"
+    cto_build_group: "awslz-cloud_developers@ollion.com"
+    cto_core_networking_build_group: "awslz-network_developers@ollion.com"
+    organization_admin: "awslz-account_manager@ollion.com"
+    cto_elevated_security_build_group: "awslz-core_security_developers@ollion.com"
+    cto_security_build_group: "awslz-security_developers@ollion.com"
+    cto_build_group2: "awslz-terraform_user@ollion.com"
+    cfo: "awslz-billing_viewers@ollion.com"
+  org_hierarchy:
+    common:
+      name: "Common"
+      scps: []
+      accounts:
+        audit_account:
+          name: "Audit Logs"
+          email: "awslz-audit_operations+logs2@cldcvr.com"
+          scps:
+            - "denyS3Modification"
+        billing_account:
+          name: "Billing"
+          email: "awslz-billing+root2@cldcvr.com"
+          scps:
+            - "denyS3Modification"
+        security_logs_account:
+          name: "Security Logs"
+          email: "awslz-security_operations+logs2@cldcvr.com"
+          scps:
+            - "denyS3Modification"
+        security_tools_account:
+          name: "Security Tools"
+          email: "awslz-security_operations+tools2@cldcvr.com"
+          scps: []
+        operational_logs_account:
+          name: "Operational Logs"
+          email: "awslz-cloud_operations+logs2@cldcvr.com"
+          scps: []
+        infra_ci_cd_account:
+          name: "Infra CI/CD"
+          email: "awslz-cloud_operations+infra3@cldcvr.com"
+          scps: []
+    infrastructure:
+      name: "Infrastructure"
+      scps: []
+      accounts:
+        network_hub_account:
+          name: "Network Hub"
+          email: "awslz-network_developers+network2@cldcvr.com"
+          scps: []
+        dns_hub_account:
+          name: "DNS Hub"
+          email: "awslz-network_developers+dns2@cldcvr.com"
+          scps: []
+        high_trust_interconnect_account:
+          name: "High Trust Interconnect"
+          email: "awslz-network_developers+hightrust2@cldcvr.com"
+          scps: []
+        no_trust_interconnect_account:
+          name: "No Trust Interconnect"
+          email: "awslz-network_developers+notrust2@cldcvr.com"
+          scps: []
+        shared_services_account:
+          name: "Shared Services"
+          email: "awslz-security_operations+sharedService2@cldcvr.com"
+          scps: []
+    application:
+      name: "Application"
+      scps: []
+      dev:
+        name: "Dev"
+        scps: []
+        accounts:
+          dev_master_account:
+            name: "Dev Master"
+            email: "awslz-cloud_developers+dev2@cldcvr.com"
+            scps: []
+          bu1_app_dev_account:
+            name: "BU1 App Dev"
+            email: "awslz-cloud_developers+bu1dev2@cldcvr.com"
+            scps: []
+      prod:
+        name: "Prod"
+        scps: []
+        accounts:
+          prod_master_account:
+            name: "Prod Master"
+            email: "awslz-cloud_developers+prod2@cldcvr.com"
+            scps: []
+          bu1_app_prod_account:
+            name: "BU1 App Prod"
+            email: "awslz-cloud_developers+bu1prod2@cldcvr.com"
+            scps: []
+      staging:
+        name: "Staging"
+        scps: []
+        accounts:
+          stg_master_account:
+            name: "Staging Master"
+            email: "awslz-cloud_developers+staging2@cldcvr.com"
+            scps: []
+          bu1_app_stg_account:
+            name: "BU1 App Staging"
+            email: "awslz-cloud_developers+bu1stg2@cldcvr.com"
+            scps: []
+network:
+  dnshub:
+    private_zone:
+      domain_name: "aws.surbana.tech"
+    resolver:
+      domain_name: "aws.surbana.tech"
+      ips:
+        - ip: "8.8.8.8"
+          port: "53"
+        - ip: "1.1.1.1"
+          port: 53
+    securitylogging:
+      enabled: true
+      log_name: "route53_log"
+    firewall:
+      dnshub_firewall_enabled: true
+      rule_group_name: "blocked-blacklist"
+      domains:
+        - "test.com."
+        - "google.com."
+  networkhub:
+    vpc:
+      ingress:
+        vpc_name: "ingress-vpc"
+        vpc_cidr: "10.11.0.0/16"
+        public_subnets_cidr: []
+        tgw_attachment_subnets_cidr: []
+      egress:
+        vpc_name: "egress-vpc"
+        vpc_cidr: "10.10.0.0/16"
+        public_subnets_cidr: []
+        tgw_attachment_subnets_cidr: []
+      inspection:
+        vpc_name: "inspection-vpc"
+        vpc_cidr: "10.64.0.0/16"
+        one_nat_gateway_per_az: true
+        private_subnets_cidr: []
+        tgw_attachment_subnets_cidr: []
+    transitGateway:
+      name: "tgw-shared-network-hub"
+    firewall:
+      enabled: true
+      firewall_name: "network-hub-firewall"
+      firewall_logging_config:
+        flow_retention_in_days: "60"
+        alert_retention_in_days: "60"
+      fivetuple_stateful_rule_group:
+        - sid: 1
+          source_ipaddress: "10.0.0.0/16"
+          destination_ipaddress: "10.1.0.0/16"
+        - sid: 2
+          source_ipaddress: "10.0.0.0/16"
+          destination_ipaddress: "10.2.0.0/16"
+        - sid: 3
+          source_ipaddress: "10.1.0.0/16"
+          destination_ipaddress: "10.2.0.0/16"
+env:
+  dev:
+    vpc_name: "main"
+    vpc_cidr: "10.0.0.0/16"
+    env: "dev"
+    private_subnets_cidr: []
+    tgw_attachment_subnets_cidr: []
+  prod:
+    vpc_name: "main"
+    vpc_cidr: "10.1.0.0/16"
+    env: "prod"
+    private_subnets_cidr: []
+    tgw_attachment_subnets_cidr: []
+  staging:
+    vpc_name: "main"
+    vpc_cidr: "10.2.0.0/16"
+    env: "staging"
+    private_subnets_cidr: []
+    tgw_attachment_subnets_cidr: []
+default_tags:
+  common:
+    environment: "Test"
+    owner: "TFProviders"
+    project: "Test"
+  account:
+    core: {}
+    cicd: {}
+    application:
+      dev: {}
+      staging: {}
+      production: {}
+  resource: {}
