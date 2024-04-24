@@ -7,8 +7,6 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "sj-dms-poc"
-    key            = "source/networking/vpc/terraform.tfstate"
-    region         = "ap-southeast-1"
+    key            = "source/rds/terraform.tfstate"
   }
 }

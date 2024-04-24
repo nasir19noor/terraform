@@ -8,7 +8,7 @@ variable "project" {
 variable "env" {
  type        = string
  description = "Environemnt"
- default     = "source"
+ default     = "target"
 }
 
 variable "ami-amazon" {
@@ -37,5 +37,5 @@ variable "instance_type" {
 
 variable "key_name" {
  type        = string
- default     = "sj-dms-source"
+ default     = "sj-dms-target"
 }

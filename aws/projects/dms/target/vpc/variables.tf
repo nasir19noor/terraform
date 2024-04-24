@@ -7,13 +7,13 @@ variable "project" {
 variable "env" {
  type        = string
  description = "Environemnt"
- default     = "source"
+ default     = "target"
 }
 
 variable "cidrs" {
  type        = string
  description = "cidrs source"
- default     = "10.1.0.0/16"
+ default     = "10.2.0.0/16"
 }
 
 variable "azs" {
@@ -25,17 +25,17 @@ variable "azs" {
 variable "public_subnet_cidrs" {
  type        = list(string)
  description = "Public Subnet CIDR values"
- default     = ["10.1.1.0/24", "10.1.2.0/24", "10.1.3.0/24"]
+ default     = ["10.2.1.0/24", "10.2.2.0/24", "10.2.3.0/24"]
 }
  
 variable "private_subnet_cidrs" {
  type        = list(string)
  description = "Private Subnet CIDR values"
- default     = ["10.1.11.0/24", "10.1.12.0/24", "10.1.13.0/24"]
+ default     = ["10.2.11.0/24", "10.2.12.0/24", "10.2.13.0/24"]
 }
 
 variable "data_subnet_cidrs" {
  type        = list(string)
  description = "Data Subnet CIDR values"
- default     = ["10.1.21.0/24", "10.1.22.0/24", "10.1.23.0/24"]
+ default     = ["10.2.21.0/24", "10.2.22.0/24", "10.2.23.0/24"]
 }

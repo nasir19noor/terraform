@@ -1,20 +1,20 @@
 
-resource "tls_private_key" "source" {
+resource "tls_private_key" "target" {
   algorithm = "RSA"
   rsa_bits = 4096
 }
 
-resource "aws_key_pair" "source" {
+resource "aws_key_pair" "target" {
   key_name = var.key_name
-  public_key = tls_private_key.source.public_key_openssh
+  public_key = tls_private_key.target.public_key_openssh
 }
 
-resource "aws_instance" "source" {
+resource "aws_instance" "target" {
   ami           = var.ami-ubuntu[1]
   instance_type = var.instance_type[0]
   subnet_id     = data.terraform_remote_state.vpc.outputs.public_subnets[1]
-  key_name = aws_key_pair.source.key_name
-  vpc_security_group_ids = [aws_security_group.source.id]
+  key_name = aws_key_pair.target.key_name
+  vpc_security_group_ids = [aws_security_group.target.id]
   associate_public_ip_address = true
   user_data = file("userdata.tpl")
   tags = {

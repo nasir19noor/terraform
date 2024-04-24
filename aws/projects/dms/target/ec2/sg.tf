@@ -1,6 +1,6 @@
-resource "aws_security_group" "source" {
+resource "aws_security_group" "target" {
   name                   = "${var.project}-${var.env}"
-  description            = "source-SG"
+  description            = "target-SG"
   vpc_id                 = data.terraform_remote_state.vpc.outputs.vpc_id
 
   tags = {
@@ -9,7 +9,7 @@ resource "aws_security_group" "source" {
 }
 
 resource "aws_security_group_rule" "http" {
-  security_group_id = aws_security_group.source.id
+  security_group_id = aws_security_group.target.id
   type              = "ingress"
 
   cidr_blocks      = ["0.0.0.0/0"]
@@ -21,7 +21,7 @@ resource "aws_security_group_rule" "http" {
 }
 
 resource "aws_security_group_rule" "https" {
-  security_group_id = aws_security_group.source.id
+  security_group_id = aws_security_group.target.id
   type              = "ingress"
 
   cidr_blocks      = ["0.0.0.0/0"]
@@ -33,7 +33,7 @@ resource "aws_security_group_rule" "https" {
 }
 
 resource "aws_security_group_rule" "ssh" {
-  security_group_id = aws_security_group.source.id
+  security_group_id = aws_security_group.target.id
   type              = "ingress"
 
   cidr_blocks      = ["0.0.0.0/0"]
@@ -44,7 +44,7 @@ resource "aws_security_group_rule" "ssh" {
   protocol  = "tcp"
 }
 resource "aws_security_group_rule" "outbond" {
-  security_group_id = aws_security_group.source.id
+  security_group_id = aws_security_group.target.id
   type              = "egress"
 
   cidr_blocks      = ["0.0.0.0/0"]
