@@ -10,5 +10,5 @@ resource "aws_db_instance" "postgresql" {
   parameter_group_name = var.parameter_group_name
   vpc_security_group_ids = ["${aws_security_group.postgresql.id}"]
   skip_final_snapshot  = true
-  publicly_accessible =  true
+  publicly_accessible =  false
 }

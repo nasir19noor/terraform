@@ -10,7 +10,7 @@ resource "aws_key_pair" "target" {
 }
 
 resource "aws_instance" "target" {
-  ami           = var.ami-ubuntu[1]
+  ami           = "ami-02d9cb9327234d514"
   instance_type = var.instance_type[0]
   subnet_id     = data.terraform_remote_state.vpc.outputs.public_subnets[1]
   key_name = aws_key_pair.target.key_name

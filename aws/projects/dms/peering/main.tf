@@ -2,11 +2,12 @@ resource "aws_vpc_peering_connection" "peer" {
   vpc_id        = data.terraform_remote_state.source.outputs.vpc_id
   peer_vpc_id   = data.terraform_remote_state.target.outputs.vpc_id
   //peer_owner_id = data.aws_caller_identity.peer.account_id
-  peer_region   = "ap-southeast-1"
+  peer_region   = "${var.region}"
   auto_accept   = false
 
   tags = {
     Side = "Requester"
+    Name = "${var.project}"
   }
 }
 
