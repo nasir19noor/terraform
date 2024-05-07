@@ -19,7 +19,7 @@ variable "engine" {
 variable "engine_version" {
  type        = list(string)
  description = "engine version"
- default     = ["16.1"]
+ default     = ["13.11"]
 }
 
 
@@ -43,8 +43,8 @@ variable "instance_type" {
 
 variable "parameter_group_name" {
  type        = string
- description = "Parameter Group Nae"
- default     = "default.postgres16"
+ description = "Parameter Group Name"
+ default     = "default.postgres13"
 }
 
 variable "username" {
