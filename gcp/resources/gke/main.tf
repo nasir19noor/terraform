@@ -1,5 +1,5 @@
 module "gke" {
-  source = "../../../../../modules/gke"
+  source = "../../modules/gke"
 
   name                     = var.name
   project_id               = var.project_id
@@ -46,57 +46,18 @@ module "gke" {
 
   master_authorized_networks_cidr_blocks = [
     {
-      cidr_block   = "10.21.14.16/29"
-      display_name = "managament network"
+      cidr_block   = "10.21.15.0/24"
+      display_name = "workload"
     }
   ]
   node_pools_tags = {
-    all = ["dev-saas-gke-pool", "egress-internet"]
+    all = ["gke"]
   }
 
-  #   node_pools_oauth_scopes = {
-  #     all = []
-
-  #     default-node-pool = [
-  #       "https://www.googleapis.com/auth/cloud-platform",
-  #     ]
-  #   }
-
-  #   node_pools_labels = {
-  #     all = {}
-
-  #     default-node-pool = {
-  #       default-node-pool = true
-  #     }
-  #   }
-
+  
     node_pools_metadata = {
       all = {node-pool-metadata-custom-value = var.name}
-
-      # default-node-pool = {
-      #   node-pool-metadata-custom-value = var.name
-      # }
     }
-
-  #   node_pools_taints = {
-  #     all = []
-
-  #     default-node-pool = [
-  #       {
-  #         key    = "default-node-pool"
-  #         value  = true
-  #         effect = "PREFER_NO_SCHEDULE"
-  #       },
-  #     ]
-  #   }
-
-  #   node_pools_tags = {
-  #     all = []
-
-  #     default-node-pool = [
-  #       "default-node-pool","egress-internet"
-  #     ]
-  #   }
 }
 
 resource "google_service_account" "gke_sa" {

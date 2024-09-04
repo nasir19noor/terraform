@@ -13,7 +13,8 @@ resource "google_container_cluster" "primary" {
   location                 = local.location
   node_locations           = local.node_locations
   cluster_ipv4_cidr        = var.cluster_ipv4_cidr
-  network                  = "projects/${local.network_project_id}/global/networks/${var.network}"
+  network                  =  "projects/${local.network_project_id}/global/networks/${var.network}"
+  # network                  = var.network
   remove_default_node_pool = var.remove_default_node_pool
   initial_node_count       = 1
   enable_legacy_abac       = var.enable_legacy_abac

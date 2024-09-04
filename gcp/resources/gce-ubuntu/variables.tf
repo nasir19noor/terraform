@@ -10,5 +10,5 @@ variable "instance_type" {}
 variable "disk_size_gb" {}
 variable "disk_type" {}
 variable "image" {}
-variable "service_account" {}
+# variable "service_account" {}
 variable "allow_stopping_for_update" {}
