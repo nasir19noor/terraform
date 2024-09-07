@@ -1,4 +1,4 @@
-module "dev-saas-gce-management-vm" {
+module "ubuntu-instance" {
   source                    = "../../modules/gce"
   instance_name             = var.instance_name
   project                   = var.project
