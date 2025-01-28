@@ -425,6 +425,24 @@ variable "enable_pod_security_policy" {
   default     = true
 }
 
+# variable "pod_security_config" {
+#   type = object({
+#     mode                  = string
+#     enforce_version       = string
+#     enforce_on_workloads  = list(string)
+#     exempt_versions       = list(string)
+#     exempt_workloads      = list(string)
+#   })
+#   description = "Configuration for Pod Security Admission"
+#   default = {
+#     mode                  = "WARN"
+#     enforce_version       = "latest"
+#     enforce_on_workloads  = []
+#     exempt_versions       = []
+#     exempt_workloads      = []
+#   }
+# }
+
 variable "enable_tpu" {
   type        = bool
   description = "Enable Cloud TPU resources in the cluster. WARNING: changing this after cluster creation is destructive!"

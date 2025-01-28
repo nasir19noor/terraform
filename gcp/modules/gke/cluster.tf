@@ -13,8 +13,7 @@ resource "google_container_cluster" "primary" {
   location                 = local.location
   node_locations           = local.node_locations
   cluster_ipv4_cidr        = var.cluster_ipv4_cidr
-  network                  =  "projects/${local.network_project_id}/global/networks/${var.network}"
-  # network                  = var.network
+  network                  = "projects/${local.network_project_id}/global/networks/${var.network}"
   remove_default_node_pool = var.remove_default_node_pool
   initial_node_count       = 1
   enable_legacy_abac       = var.enable_legacy_abac
@@ -119,7 +118,13 @@ resource "google_container_cluster" "primary" {
   pod_security_policy_config {
     enabled = var.enable_pod_security_policy
   }
-
+  # pod_security_config {
+  #   mode                  = var.pod_security_config.mode
+  #   enforce_version       = var.pod_security_config.enforce_version
+  #   enforce_on_workloads  = var.pod_security_config.enforce_on_workloads
+  #   exempt_versions       = var.pod_security_config.exempt_versions
+  #   exempt_workloads      = var.pod_security_config.exempt_workloads
+  # }
 
   # master_authorized_networks_config {
   #   dynamic "cidr_blocks" {
@@ -355,7 +360,7 @@ resource "google_container_node_pool" "pools" {
     tags = concat(
       local.node_pools_tags[each.value["name"]],
     )
-
+    
     local_ssd_count = lookup(each.value, "local_ssd_count", 0)
     disk_size_gb    = lookup(each.value, "disk_size_gb", 100)
     disk_type       = lookup(each.value, "disk_type", "pd-standard")
@@ -409,6 +414,7 @@ resource "google_container_node_pool" "pools" {
     delete = "45m"
   }
   lifecycle {
-    ignore_changes = [initial_node_count, node_count]
+    ignore_changes = [initial_node_count, node_count, node_config]
+    prevent_destroy = false
   }
 }

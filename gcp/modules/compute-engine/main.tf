@@ -71,6 +71,7 @@ resource "google_compute_disk" "default" {
   for_each = var.disks
   name     = "${var.instance_name}-disk-${each.key}"
   type     = each.value.type
+  project  = var.project
   disk_encryption_key {
     kms_key_self_link = var.disk_encryption_key       
   }
