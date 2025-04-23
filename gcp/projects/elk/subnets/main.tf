@@ -13,17 +13,4 @@ module "vpc_subnets" {
       description           = local.description
     }
   ]
-
-  secondary_ranges = {
-    (local.subnet_name) = [
-      {
-        range_name    = "sub-gke-pod"
-        ip_cidr_range = "10.20.0.0/16"
-      },
-      {
-        range_name    = "sub-gke-svc"
-        ip_cidr_range = "10.21.8.0/22"
-      }
-    ]
-  }
 }

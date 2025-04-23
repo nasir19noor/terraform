@@ -7,6 +7,6 @@ terraform {
     }
   }
   backend "gcs" {
-    prefix = "management-vm/"
+    prefix = "elk-vm/"
   }
 }

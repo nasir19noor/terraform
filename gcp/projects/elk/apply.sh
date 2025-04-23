@@ -24,13 +24,24 @@ terraform init -backend-config=backend.conf
 terraform plan
 terraform apply --auto-approve
 
-#Spin up management vm
+#Spin up management app vm
 echo "-----------------------"
-echo "Create Management VM"
+echo "Create App VM"
 echo "-----------------------"
-cd ../management-vm
+cd ../vm/app
 rm backend.conf
-ln -s ../backend.conf backend.conf
+ln -s ../../backend.conf backend.conf
+terraform init -backend-config=backend.conf
+terraform plan
+terraform apply --auto-approve
+
+#Spin up management elk vm
+echo "-----------------------"
+echo "Create ELK VM"
+echo "-----------------------"
+cd ../elk
+rm backend.conf
+ln -s ../../backend.conf backend.conf
 terraform init -backend-config=backend.conf
 terraform plan
 terraform apply --auto-approve
@@ -39,18 +50,7 @@ terraform apply --auto-approve
 echo "-----------------------"
 echo "Create Firewall"
 echo "-----------------------"
-cd ../firewall
-rm backend.conf
-ln -s ../backend.conf backend.conf
-terraform init -backend-config=backend.conf
-terraform plan
-terraform apply --auto-approve
-
-#Configure GKE
-echo "-----------------------"
-echo "Create GKE"
-echo "-----------------------"
-cd ../gke
+cd ../../firewall
 rm backend.conf
 ln -s ../backend.conf backend.conf
 terraform init -backend-config=backend.conf

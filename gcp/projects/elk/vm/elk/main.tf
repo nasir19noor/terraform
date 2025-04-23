@@ -1,5 +1,5 @@
-module "managment-vm" {
-  source                    = "../../../modules/compute-engine"
+module "elk-vm" {
+  source                    = "../../../../modules/compute-engine"
   instance_name             = local.instance_name
   project                   = local.project_id
   network_project_id        = local.project_id
@@ -17,7 +17,10 @@ module "managment-vm" {
   create_external_static_ip = local.create_external_static_ip
   allow_stopping_for_update = local.allow_stopping_for_update
 
-  tags   = ["management"]
+  # add startup script
+  startup_script   = file("elk.sh")
+
+  tags   = ["elk"]
    labels = { environment = "dev", creation-mode = "tf", os = "ubuntu" }
 }
 
