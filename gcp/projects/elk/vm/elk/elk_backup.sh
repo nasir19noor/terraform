@@ -1,5 +1,5 @@
 #update
-sudo apt update && sudo apt upgrade -y  
+sudo apt update
 #install java
 sudo apt install openjdk-21-jre-headless -y
 
@@ -7,12 +7,15 @@ sudo apt install openjdk-21-jre-headless -y
 sudo apt install nginx -y
 
 #install elasticsearch
-wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
-sudo apt-get install apt-transport-https
-sudo echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+sudo curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch |sudo gpg --dearmor -o /usr/share/keyrings/elastic.gpg
+echo "deb [signed-by=/usr/share/keyrings/elastic.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+sudo apt update
 sudo apt install elasticsearch -y
 sudo echo "network.host: 0.0.0.0" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
-
+sudo echo "transport.host: 0.0.0.0" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
+sudo echo "http.port: 9200" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
+sudo echo "transport.port: 9300" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
+sudo echo "network.bind_host: 0.0.0.0" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
 sudo systemctl start elasticsearch
 sudo systemctl enable elasticsearch
 sudo curl -X GET "localhost:9200"
@@ -80,29 +83,8 @@ sudo sed -i 's/output.elasticsearch:/\#output.elasticsearch:/; s/hosts: \["local
 sudo filebeat modules enable system
 sudo filebeat modules list
 sudo filebeat setup --pipelines --modules system
-#sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["https://localhost:9200"]'
-sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["https://localhost:9200"]' -E 'output.elasticsearch.ssl.verification_mode=none' -E 'output.elasticsearch.username=elastic' -E 'output.elasticsearch.password=9ETvYuCpJN0_v_l_2s-G'
-#sudo filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['localhost:9200'] -E setup.kibana.host=localhost:5601
-sudo filebeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["https://localhost:9200"]' -E 'output.elasticsearch.ssl.verification_mode=none' -E 'output.elasticsearch.username=elastic' -E 'output.elasticsearch.password=9ETvYuCpJN0_v_l_2s-G' -E setup.kibana.host=localhost:5601
+sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]'
+sudo filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['localhost:9200'] -E setup.kibana.host=localhost:5601
 sudo systemctl start filebeat
 sudo systemctl enable filebeat
 sudo curl -XGET 'http://localhost:9200/filebeat-*/_search?pretty'
-
-sudo nano /etc/filebeat/filebeat.yml
-Find the modules configuration section and comment it out or set it to false:
-
-filebeat.config.modules:
-  # Comment out or remove these lines if you're not using modules
-  #path: ${path.config}/modules.d/*.yml
-  #reload.enabled: false
-
-  Make sure you have at least one input enabled:
-Since you're disabling modules, make sure you have at least one input configuration that's enabled. In your original configuration, the filestream input had enabled: false. Change this to enabled: true if you want to use it.
-
-
-filebeat.inputs:
-- type: filestream
-  id: my-filestream-id
-  enabled: true  # Change this to true
-  paths:
-    - /var/log/*.log

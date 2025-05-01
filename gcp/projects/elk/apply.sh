@@ -24,24 +24,25 @@ terraform init -backend-config=backend.conf
 terraform plan
 terraform apply --auto-approve
 
-#Spin up management app vm
+#Spin up elk vm
 echo "-----------------------"
-echo "Create App VM"
+echo "Create ELK VM"
 echo "-----------------------"
-cd ../vm/app
+cd ../vm/elk
 rm backend.conf
 ln -s ../../backend.conf backend.conf
 terraform init -backend-config=backend.conf
 terraform plan
 terraform apply --auto-approve
 
-#Spin up management elk vm
+#Spin up app vm
 echo "-----------------------"
-echo "Create ELK VM"
+echo "Create App VM"
 echo "-----------------------"
-cd ../elk
+cd ../app
 rm backend.conf
 ln -s ../../backend.conf backend.conf
+sed "s/xyz/$(cat ../elk/external-ip.txt)/g" template > filebeat.sh
 terraform init -backend-config=backend.conf
 terraform plan
 terraform apply --auto-approve
@@ -57,12 +58,10 @@ terraform init -backend-config=backend.conf
 terraform plan
 terraform apply --auto-approve
 
-
 cd ../
 STATE_BUCKET=$(yq eval '.global.state_bucket' config.yaml)
 PROJECT_ID=$(yq eval '.global.project_id' config.yaml)
 REGION=$(yq eval '.global.region' config.yaml)
-
 
 #Upload tf state
 #cd terraform-state-bucket

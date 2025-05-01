@@ -63,6 +63,19 @@ module "firewall-5601" {
   target_tags   = local.ssh_target_tags
 }
 
+module "firewall-5044" {
+  source = "../../../modules/firewall"
+
+  project       = local.project_id
+  name          = "nasir-elk-allow-5044"
+  network       = local.network
+  description   = "allow 5044"
+  protocol      = local.ssh_protocol
+  ports         = ["5044"]
+  source_ranges = local.ssh_source_ranges
+  target_tags   = local.ssh_target_tags
+}
+
 
 
 

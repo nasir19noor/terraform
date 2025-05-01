@@ -17,9 +17,14 @@ module "app-vm" {
   create_external_static_ip = local.create_external_static_ip
   allow_stopping_for_update = local.allow_stopping_for_update
 
+  # add startup script
+  startup_script   = file("filebeat.sh")
+
   tags   = ["app"]
    labels = { environment = "dev", creation-mode = "tf", os = "ubuntu" }
 }
+
+
 
 data "google_project" "project" {
   project_id = local.project_id 
