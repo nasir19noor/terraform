@@ -12,38 +12,17 @@ network:
   subnet_count: 2
   subnet_mask: "24"
 
-vm:
-  app: 
-    instance_name: "app-vm"
-    zone: "asia-southeast1-b"
-    instance: "linux"
-    instance_type: "n1-standard-1"
-    disk_size_gb: 50
-    disk_type: "pd-balanced"
-    image: "ubuntu-os-cloud/ubuntu-2204-lts"
-    create_internal_static_ip: true
-    create_external_static_ip: true
-    allow_stopping_for_update: true  
-  elk: 
-    instance_name: "elk-vm"
-    zone: "asia-southeast1-c"
-    instance: "linux"
-    instance_type: "n2-standard-2"
-    disk_size_gb: 50
-    disk_type: "pd-balanced"
-    image: "ubuntu-os-cloud/ubuntu-2204-lts"
-    create_internal_static_ip: true
-    create_external_static_ip: true
-    allow_stopping_for_update: true    
-
-firewall-ssh:
-  name: "nasir-elk-vpc-allow-ssh"
-  description: "allow ssh"
-  protocol: "tcp"
-  ports: ["22"]
-  source_ranges: ["0.0.0.0/0"]
-  target_tags: ["app", "elk"]  
-
-
+ec2:
+  kafka: 
+    instance_name: "kafka"
+    instance_type: "t3.micro"
+    ami: "ami-0c1907b6d738188e5"
+    root_block_device:
+      volume_size : 50
+      volume_type: "gp3"
+      delete_on_termination: true
+      encrypted: true
+      
+ 
 
 

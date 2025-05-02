@@ -10,6 +10,7 @@ resource "aws_subnet" "this" {
   vpc_id            = var.vpc_id
   cidr_block        = element(var.cidr_blocks, count.index)
   availability_zone = element(local.availability_zones, count.index)
+  map_public_ip_on_launch = var.map_public_ip_on_launch
 
   tags = merge(
     var.tags,

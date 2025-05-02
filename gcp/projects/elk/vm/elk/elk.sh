@@ -81,9 +81,9 @@ sudo filebeat modules enable system
 sudo filebeat modules list
 sudo filebeat setup --pipelines --modules system
 #sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["https://localhost:9200"]'
-sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["https://localhost:9200"]' -E 'output.elasticsearch.ssl.verification_mode=none' -E 'output.elasticsearch.username=elastic' -E 'output.elasticsearch.password=9ETvYuCpJN0_v_l_2s-G'
+sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["https://localhost:9200"]' -E 'output.elasticsearch.ssl.verification_mode=none' -E 'output.elasticsearch.username=elastic' -E 'output.elasticsearch.password=<>'
 #sudo filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['localhost:9200'] -E setup.kibana.host=localhost:5601
-sudo filebeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["https://localhost:9200"]' -E 'output.elasticsearch.ssl.verification_mode=none' -E 'output.elasticsearch.username=elastic' -E 'output.elasticsearch.password=9ETvYuCpJN0_v_l_2s-G' -E setup.kibana.host=localhost:5601
+sudo filebeat setup -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["https://localhost:9200"]' -E 'output.elasticsearch.ssl.verification_mode=none' -E 'output.elasticsearch.username=elastic' -E 'output.elasticsearch.password=<>' -E setup.kibana.host=localhost:5601
 sudo systemctl start filebeat
 sudo systemctl enable filebeat
 sudo curl -XGET 'http://localhost:9200/filebeat-*/_search?pretty'

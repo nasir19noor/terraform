@@ -8,3 +8,4 @@ locals {
   enable_dns_hostnames    = local.config.network.enable_dns_hostnames
   enable_dns_support      = local.config.network.enable_dns_support
 }    
+
