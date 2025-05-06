@@ -1,4 +1,4 @@
-module "azure_agent" {
+module "ec2_kafka" {
   source                      = "./../../../../modules/ec2"
   create                      = true
   instance_type               = local.instance_type
@@ -31,7 +31,7 @@ module "azure_agent" {
   }
 
   tags = {
-    "Name" = "kafka"
+    "Name" = local.name
   }
 }
 
@@ -42,7 +42,43 @@ module "security_group_kafka" {
   security_group_name = "kafka-sg"
   description         = "Security group for kafka"
   vpc_id              = local.vpc_id
-  ingress             = []
+  ingress = [
+    {
+      from_port   = 9092
+      to_port     = 9092
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "Allow Kafka broker traffic"
+    },
+    {
+      from_port   = 2181
+      to_port     = 2181
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "Allow ZooKeeper traffic"
+    },
+    {
+      from_port   = 9093
+      to_port     = 9093
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "Allow Kafka SSL traffic"
+    },
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "Allow SSH access"
+    },
+     {
+      from_port   = -1
+      to_port     = -1
+      protocol    = "icmp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "Allow ICMP traffic"
+    }
+  ]
   egress = [
     {
       from_port   = 0

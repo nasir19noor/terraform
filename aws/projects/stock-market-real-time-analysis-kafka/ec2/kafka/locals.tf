@@ -7,6 +7,7 @@ locals {
   instance_type           = local.config.ec2.kafka.instance_type
   ami                     = local.config.ec2.kafka.ami
   availability_zone       = data.terraform_remote_state.subnet.outputs.subnet_availability_zones[0]
+  name                    = local.config.ec2.kafka.name
   root_block_device_volume_size = local.config.ec2.kafka.root_block_device.volume_size
   root_block_device_volume_type = local.config.ec2.kafka.root_block_device.volume_type
   root_block_device_delete_on_termination = local.config.ec2.kafka.root_block_device.delete_on_termination
