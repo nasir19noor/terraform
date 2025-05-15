@@ -18,7 +18,7 @@ output "default_security_group_id" {
   value       = aws_vpc.this.default_security_group_id
 }
 
-output "default_route_table_id" {
+output "main_route_table_id" {
   description = "The ID of the routa table created by default on VPC creation"
-  value       = aws_vpc.this.default_route_table_id
+  value       = aws_vpc.this.main_route_table_id
 }
