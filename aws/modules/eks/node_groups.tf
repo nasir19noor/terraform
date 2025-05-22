@@ -32,7 +32,7 @@ resource "time_sleep" "this" {
   create_duration = var.dataplane_wait_duration
 
   triggers = {
-    cluster_name         = aws_eks_cluster.this[0].name
+    cluster_name         = aws_eks_cluster.this[0].id
     cluster_endpoint     = aws_eks_cluster.this[0].endpoint
     cluster_version      = aws_eks_cluster.this[0].version
     cluster_service_cidr = var.cluster_ip_family == "ipv6" ? try(local.kubernetes_network_config.service_ipv6_cidr, "") : try(local.kubernetes_network_config.service_ipv4_cidr, "")
@@ -283,6 +283,8 @@ module "fargate_profile" {
   # To better understand why this `lookup()` logic is required, see:
   # https://github.com/hashicorp/terraform/issues/31646#issuecomment-1217279031
   iam_role_additional_policies = lookup(each.value, "iam_role_additional_policies", lookup(var.fargate_profile_defaults, "iam_role_additional_policies", {}))
+  create_iam_role_policy       = try(each.value.create_iam_role_policy, var.fargate_profile_defaults.create_iam_role_policy, true)
+  iam_role_policy_statements   = try(each.value.iam_role_policy_statements, var.fargate_profile_defaults.iam_role_policy_statements, [])
 
   tags = merge(var.tags, try(each.value.tags, var.fargate_profile_defaults.tags, {}))
 }
@@ -321,11 +323,11 @@ module "eks_managed_node_group" {
   force_update_version = try(each.value.force_update_version, var.eks_managed_node_group_defaults.force_update_version, null)
   instance_types       = try(each.value.instance_types, var.eks_managed_node_group_defaults.instance_types, null)
   labels               = try(each.value.labels, var.eks_managed_node_group_defaults.labels, null)
-
-  remote_access = try(each.value.remote_access, var.eks_managed_node_group_defaults.remote_access, {})
-  taints        = try(each.value.taints, var.eks_managed_node_group_defaults.taints, {})
-  update_config = try(each.value.update_config, var.eks_managed_node_group_defaults.update_config, local.default_update_config)
-  timeouts      = try(each.value.timeouts, var.eks_managed_node_group_defaults.timeouts, {})
+  node_repair_config   = try(each.value.node_repair_config, var.eks_managed_node_group_defaults.node_repair_config, null)
+  remote_access        = try(each.value.remote_access, var.eks_managed_node_group_defaults.remote_access, {})
+  taints               = try(each.value.taints, var.eks_managed_node_group_defaults.taints, {})
+  update_config        = try(each.value.update_config, var.eks_managed_node_group_defaults.update_config, local.default_update_config)
+  timeouts             = try(each.value.timeouts, var.eks_managed_node_group_defaults.timeouts, {})
 
   # User data
   platform                   = try(each.value.platform, var.eks_managed_node_group_defaults.platform, "linux")
@@ -373,10 +375,13 @@ module "eks_managed_node_group" {
   metadata_options                   = try(each.value.metadata_options, var.eks_managed_node_group_defaults.metadata_options, local.metadata_options)
   enable_monitoring                  = try(each.value.enable_monitoring, var.eks_managed_node_group_defaults.enable_monitoring, true)
   enable_efa_support                 = try(each.value.enable_efa_support, var.eks_managed_node_group_defaults.enable_efa_support, false)
+  enable_efa_only                    = try(each.value.enable_efa_only, var.eks_managed_node_group_defaults.enable_efa_only, false)
+  efa_indices                        = try(each.value.efa_indices, var.eks_managed_node_group_defaults.efa_indices, [0])
   create_placement_group             = try(each.value.create_placement_group, var.eks_managed_node_group_defaults.create_placement_group, false)
+  placement                          = try(each.value.placement, var.eks_managed_node_group_defaults.placement, {})
+  placement_group_az                 = try(each.value.placement_group_az, var.eks_managed_node_group_defaults.placement_group_az, null)
   placement_group_strategy           = try(each.value.placement_group_strategy, var.eks_managed_node_group_defaults.placement_group_strategy, "cluster")
   network_interfaces                 = try(each.value.network_interfaces, var.eks_managed_node_group_defaults.network_interfaces, [])
-  placement                          = try(each.value.placement, var.eks_managed_node_group_defaults.placement, {})
   maintenance_options                = try(each.value.maintenance_options, var.eks_managed_node_group_defaults.maintenance_options, {})
   private_dns_name_options           = try(each.value.private_dns_name_options, var.eks_managed_node_group_defaults.private_dns_name_options, {})
 
@@ -393,6 +398,8 @@ module "eks_managed_node_group" {
   # To better understand why this `lookup()` logic is required, see:
   # https://github.com/hashicorp/terraform/issues/31646#issuecomment-1217279031
   iam_role_additional_policies = lookup(each.value, "iam_role_additional_policies", lookup(var.eks_managed_node_group_defaults, "iam_role_additional_policies", {}))
+  create_iam_role_policy       = try(each.value.create_iam_role_policy, var.eks_managed_node_group_defaults.create_iam_role_policy, true)
+  iam_role_policy_statements   = try(each.value.iam_role_policy_statements, var.eks_managed_node_group_defaults.iam_role_policy_statements, [])
 
   # Autoscaling group schedule
   create_schedule = try(each.value.create_schedule, var.eks_managed_node_group_defaults.create_schedule, true)
@@ -430,6 +437,7 @@ module "self_managed_node_group" {
   min_size                  = try(each.value.min_size, var.self_managed_node_group_defaults.min_size, 0)
   max_size                  = try(each.value.max_size, var.self_managed_node_group_defaults.max_size, 3)
   desired_size              = try(each.value.desired_size, var.self_managed_node_group_defaults.desired_size, 1)
+  desired_size_type         = try(each.value.desired_size_type, var.self_managed_node_group_defaults.desired_size_type, null)
   capacity_rebalance        = try(each.value.capacity_rebalance, var.self_managed_node_group_defaults.capacity_rebalance, null)
   min_elb_capacity          = try(each.value.min_elb_capacity, var.self_managed_node_group_defaults.min_elb_capacity, null)
   wait_for_elb_capacity     = try(each.value.wait_for_elb_capacity, var.self_managed_node_group_defaults.wait_for_elb_capacity, null)
@@ -440,9 +448,13 @@ module "self_managed_node_group" {
   context                   = try(each.value.context, var.self_managed_node_group_defaults.context, null)
 
   target_group_arns         = try(each.value.target_group_arns, var.self_managed_node_group_defaults.target_group_arns, [])
+  create_placement_group    = try(each.value.create_placement_group, var.self_managed_node_group_defaults.create_placement_group, false)
   placement_group           = try(each.value.placement_group, var.self_managed_node_group_defaults.placement_group, null)
+  placement_group_az        = try(each.value.placement_group_az, var.self_managed_node_group_defaults.placement_group_az, null)
   health_check_type         = try(each.value.health_check_type, var.self_managed_node_group_defaults.health_check_type, null)
   health_check_grace_period = try(each.value.health_check_grace_period, var.self_managed_node_group_defaults.health_check_grace_period, null)
+
+  ignore_failed_scaling_activities = try(each.value.ignore_failed_scaling_activities, var.self_managed_node_group_defaults.ignore_failed_scaling_activities, null)
 
   force_delete           = try(each.value.force_delete, var.self_managed_node_group_defaults.force_delete, null)
   force_delete_warm_pool = try(each.value.force_delete_warm_pool, var.self_managed_node_group_defaults.force_delete_warm_pool, null)
@@ -465,7 +477,7 @@ module "self_managed_node_group" {
   autoscaling_group_tags = try(each.value.autoscaling_group_tags, var.self_managed_node_group_defaults.autoscaling_group_tags, {})
 
   # User data
-  platform = try(each.value.platform, var.self_managed_node_group_defaults.platform, "linux")
+  platform = try(each.value.platform, var.self_managed_node_group_defaults.platform, null)
   # TODO - update this when `var.platform` is removed in v21.0
   ami_type                 = try(each.value.ami_type, var.self_managed_node_group_defaults.ami_type, "AL2_x86_64")
   cluster_endpoint         = try(time_sleep.this[0].triggers["cluster_endpoint"], "")
@@ -516,6 +528,8 @@ module "self_managed_node_group" {
   metadata_options                   = try(each.value.metadata_options, var.self_managed_node_group_defaults.metadata_options, local.metadata_options)
   enable_monitoring                  = try(each.value.enable_monitoring, var.self_managed_node_group_defaults.enable_monitoring, true)
   enable_efa_support                 = try(each.value.enable_efa_support, var.self_managed_node_group_defaults.enable_efa_support, false)
+  enable_efa_only                    = try(each.value.enable_efa_only, var.self_managed_node_group_defaults.enable_efa_only, false)
+  efa_indices                        = try(each.value.efa_indices, var.self_managed_node_group_defaults.efa_indices, [0])
   network_interfaces                 = try(each.value.network_interfaces, var.self_managed_node_group_defaults.network_interfaces, [])
   placement                          = try(each.value.placement, var.self_managed_node_group_defaults.placement, {})
   maintenance_options                = try(each.value.maintenance_options, var.self_managed_node_group_defaults.maintenance_options, {})
@@ -534,6 +548,8 @@ module "self_managed_node_group" {
   # To better understand why this `lookup()` logic is required, see:
   # https://github.com/hashicorp/terraform/issues/31646#issuecomment-1217279031
   iam_role_additional_policies = lookup(each.value, "iam_role_additional_policies", lookup(var.self_managed_node_group_defaults, "iam_role_additional_policies", {}))
+  create_iam_role_policy       = try(each.value.create_iam_role_policy, var.self_managed_node_group_defaults.create_iam_role_policy, true)
+  iam_role_policy_statements   = try(each.value.iam_role_policy_statements, var.self_managed_node_group_defaults.iam_role_policy_statements, [])
 
   # Access entry
   create_access_entry = try(each.value.create_access_entry, var.self_managed_node_group_defaults.create_access_entry, true)

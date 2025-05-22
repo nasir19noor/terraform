@@ -92,6 +92,12 @@ variable "iam_policy_description" {
   default     = "Karpenter controller IAM policy"
 }
 
+variable "iam_policy_statements" {
+  description = "A list of IAM policy [statements](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document#statement) - used for adding specific IAM permissions as needed"
+  type        = any
+  default     = []
+}
+
 variable "iam_role_policies" {
   description = "Policies to attach to the IAM role in `{'static_name' = 'policy_arn'}` format"
   type        = map(string)
@@ -108,6 +114,13 @@ variable "enable_pod_identity" {
   description = "Determines whether to enable support for EKS pod identity"
   type        = bool
   default     = true
+}
+
+# TODO - make v1 permssions the default policy at next breaking change
+variable "enable_v1_permissions" {
+  description = "Determines whether to enable permissions suitable for v1+ (`true`) or for v0.33.x-v0.37.x (`false`)"
+  type        = bool
+  default     = false
 }
 
 ################################################################################
@@ -223,7 +236,7 @@ variable "node_iam_role_name" {
 }
 
 variable "node_iam_role_use_name_prefix" {
-  description = "Determines whether the IAM role name (`iam_role_name`) is used as a prefix"
+  description = "Determines whether the Node IAM role name (`node_iam_role_name`) is used as a prefix"
   type        = bool
   default     = true
 }

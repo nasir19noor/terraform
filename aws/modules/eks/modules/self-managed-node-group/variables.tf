@@ -10,10 +10,16 @@ variable "tags" {
   default     = {}
 }
 
+# tflint-ignore: terraform_unused_declarations
 variable "platform" {
-  description = "[DEPRECATED - use `ami_type` instead. Will be removed in `v21.0`] Identifies the OS platform as `bottlerocket`, `linux` (AL2), `al2023`, or `windows`"
+  description = "[DEPRECATED - must use `ami_type` instead. Will be removed in `v21.0`]"
   type        = string
-  default     = "linux"
+  default     = null
+
+  validation {
+    condition     = var.platform == null
+    error_message = "`platform` is no longer valid due to the number of OS choices. Please provide an [`ami_type`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-amitype) instead."
+  }
 }
 
 ################################################################################
@@ -48,6 +54,12 @@ variable "cluster_ip_family" {
   description = "The IP family used to assign Kubernetes pod and service addresses. Valid values are `ipv4` (default) and `ipv6`"
   type        = string
   default     = "ipv4"
+}
+
+variable "additional_cluster_dns_ips" {
+  description = "Additional DNS IP addresses to use for the cluster. Only used when `ami_type` = `BOTTLEROCKET_*`"
+  type        = list(string)
+  default     = []
 }
 
 variable "pre_bootstrap_user_data" {
@@ -244,6 +256,12 @@ variable "placement" {
   default     = {}
 }
 
+variable "create_placement_group" {
+  description = "Determines whether a placement group is created & used by the node group"
+  type        = bool
+  default     = false
+}
+
 variable "private_dns_name_options" {
   description = "The options for the instance hostname. The default values are inherited from the subnet"
   type        = map(string)
@@ -316,6 +334,19 @@ variable "enable_efa_support" {
   default     = false
 }
 
+# TODO - make this true by default at next breaking change (remove variable, only pass indices)
+variable "enable_efa_only" {
+  description = "Determines whether to enable EFA (`false`, default) or EFA and EFA-only (`true`) network interfaces. Note: requires vpc-cni version `v1.18.4` or later"
+  type        = bool
+  default     = false
+}
+
+variable "efa_indices" {
+  description = "The indices of the network interfaces that should be EFA-enabled. Only valid when `enable_efa_support` = `true`"
+  type        = list(number)
+  default     = [0]
+}
+
 variable "metadata_options" {
   description = "Customize the metadata options for the instance"
   type        = map(string)
@@ -372,6 +403,12 @@ variable "availability_zones" {
   default     = null
 }
 
+variable "placement_group_az" {
+  description = "Availability zone where placement group is created (ex. `eu-west-1c`)"
+  type        = string
+  default     = null
+}
+
 variable "subnet_ids" {
   description = "A list of subnet IDs to launch resources in. Subnets automatically determine which availability zones the group will reside. Conflicts with `availability_zones`"
   type        = list(string)
@@ -394,6 +431,18 @@ variable "desired_size" {
   description = "The number of Amazon EC2 instances that should be running in the autoscaling group"
   type        = number
   default     = 1
+}
+
+variable "desired_size_type" {
+  description = "The unit of measurement for the value specified for `desired_size`. Supported for attribute-based instance type selection only. Valid values: `units`, `vcpu`, `memory-mib`"
+  type        = string
+  default     = null
+}
+
+variable "ignore_failed_scaling_activities" {
+  description = "Whether to ignore failed Auto Scaling scaling activities while waiting for capacity."
+  type        = bool
+  default     = null
 }
 
 variable "context" {
@@ -634,11 +683,27 @@ variable "iam_role_tags" {
 }
 
 ################################################################################
+# IAM Role Policy
+################################################################################
+
+variable "create_iam_role_policy" {
+  description = "Determines whether an IAM role policy is created or not"
+  type        = bool
+  default     = true
+}
+
+variable "iam_role_policy_statements" {
+  description = "A list of IAM policy [statements](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document#statement) - used for adding specific IAM permissions as needed"
+  type        = any
+  default     = []
+}
+
+################################################################################
 # Access Entry
 ################################################################################
 
 variable "create_access_entry" {
-  description = "Determines whether an access entry is created for the IAM role used by the nodegroup"
+  description = "Determines whether an access entry is created for the IAM role used by the node group"
   type        = bool
   default     = true
 }
