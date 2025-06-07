@@ -52,3 +52,27 @@ variable "restrict_public_buckets" {
   type        = bool
   default     = true
 }
+
+variable "enable_website_hosting" {
+  description = "If true, configure the S3 bucket for static website hosting."
+  type        = bool
+  default     = false
+}
+
+variable "enable_public_read_access" {
+  description = "If true, configure ACLs and a bucket policy to allow public read access. This requires public access blocks to be disabled."
+  type        = bool
+  default     = false
+}
+
+variable "index_document" {
+  description = "The name of the index document for the website."
+  type        = string
+  default     = "index.html"
+}
+
+variable "error_document" {
+  description = "The name of the error document for the website."
+  type        = string
+  default     = "error.html"
+}
