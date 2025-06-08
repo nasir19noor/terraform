@@ -160,8 +160,8 @@ variable "ordered_cache_behaviors" {
     default_ttl                = optional(number, 3600)
     max_ttl                    = optional(number, 86400)
     
-    trusted_signers            = optional(list(string), [])
-    trusted_key_groups         = optional(list(string), [])
+    # trusted_signers            = optional(list(string), [])
+    # trusted_key_groups         = optional(list(string), [])
     
     lambda_function_associations = optional(list(object({
       event_type   = string

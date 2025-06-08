@@ -101,22 +101,22 @@ resource "aws_cloudfront_distribution" "this" {
     max_ttl     = var.default_cache_behavior.max_ttl
 
     # Trusted signers
-    dynamic "trusted_signers" {
-      for_each = length(var.default_cache_behavior.trusted_signers) > 0 ? [1] : []
-      content {
-        enabled   = true
-        items     = var.default_cache_behavior.trusted_signers
-      }
-    }
+    # dynamic "trusted_signers" {
+    #   for_each = length(var.default_cache_behavior.trusted_signers) > 0 ? [1] : []
+    #   content {
+    #     enabled   = true
+    #     items     = var.default_cache_behavior.trusted_signers
+    #   }
+    # }
 
-    # Trusted key groups
-    dynamic "trusted_key_groups" {
-      for_each = length(var.default_cache_behavior.trusted_key_groups) > 0 ? [1] : []
-      content {
-        enabled   = true
-        items     = var.default_cache_behavior.trusted_key_groups
-      }
-    }
+    # # Trusted key groups
+    # dynamic "trusted_key_groups" {
+    #   for_each = length(var.default_cache_behavior.trusted_key_groups) > 0 ? [1] : []
+    #   content {
+    #     enabled   = true
+    #     items     = var.default_cache_behavior.trusted_key_groups
+    #   }
+    # }
 
     # Lambda function associations
     dynamic "lambda_function_association" {
