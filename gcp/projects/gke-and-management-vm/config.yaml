@@ -34,7 +34,7 @@ firewall-ssh:
 gke:
   name: "nasir-cluster"
   description: "GKE Nasir Cluster"
-  kubernetes_version: "1.32.3-gke.1927002"
+  kubernetes_version: "1.32.4-gke.1353003"
   datapath_provider: "LEGACY_DATAPATH"  
   enable_l4_ilb_subsetting: true
   networking_mode: "VPC_NATIVE"
