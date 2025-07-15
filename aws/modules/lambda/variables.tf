@@ -13,7 +13,7 @@ variable "architecture" {
   type        = string
 }
 
-variable "role_arn" {
+variable "role_name" {
   description = "The ARN of the IAM role for the function to assume."
   type        = string
 }
