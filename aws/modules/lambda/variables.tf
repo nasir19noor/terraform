@@ -13,10 +13,10 @@ variable "architecture" {
   type        = string
 }
 
-# variable "role_arn" {
-#   description = "The ARN of the IAM role for the function to assume."
-#   type        = string
-# }
+variable "role_arn" {
+  description = "The ARN of the IAM role for the function to assume."
+  type        = string
+}
 
 variable "source_code_path" {
   description = "The file path for the Lambda function's source code."
