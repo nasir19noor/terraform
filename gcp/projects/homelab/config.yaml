@@ -1,0 +1,61 @@
+global:
+  region: "asia-southeast1"
+  state_bucket: "nasir-homelab-tf-state"
+  project_id: "nasir-456515"
+
+network:
+  vpc_name: "nasir-vpc" 
+  auto_create_subnetworks: false
+  description: "Nasir VPC"
+  subnet_name: "nasir-asia-southeast1"
+  subnet_ip: "10.0.0.0/16"
+  subnet_description: "Nasir asia southeast 1"
+
+k8s-master:
+  instance_name: "k8s-master"
+  zone: "asia-southeast1-a"
+  instance: "linux"
+  instance_type: "n1-standard-1"
+  disk_size_gb: 10
+  disk_type: "pd-balanced"
+  image: "ubuntu-os-cloud/ubuntu-2404-lts"
+  create_internal_static_ip: true
+  create_external_static_ip: true
+  allow_stopping_for_update: true  
+
+k8s-worker-1:
+  instance_name: "k8s-worker-1"
+  zone: "asia-southeast1-b"
+  instance: "linux"
+  instance_type: "n1-standard-1"
+  disk_size_gb: 10
+  disk_type: "pd-balanced"
+  image: "ubuntu-os-cloud/ubuntu-2404-lts"
+  create_internal_static_ip: true
+  create_external_static_ip: true
+  allow_stopping_for_update: true
+
+k8s-worker-2:
+  instance_name: "k8s-worker-2"
+  zone: "asia-southeast1-c"
+  instance: "linux"
+  instance_type: "n1-standard-1"
+  disk_size_gb: 10
+  disk_type: "pd-balanced"
+  image: "ubuntu-os-cloud/ubuntu-2404-lts"
+  create_internal_static_ip: true
+  create_external_static_ip: true
+  allow_stopping_for_update: true 
+
+firewall-ssh:
+  name: "gke-nasir-vpc-allow-ssh"
+  description: "allow ssh"
+  protocol: "tcp"
+  ports: ["22"]
+  source_ranges: ["0.0.0.0/0"]
+  target_tags: ["management"]  
+
+
+
+
+
