@@ -362,7 +362,7 @@ resource "google_container_node_pool" "pools" {
     )
     
     local_ssd_count = lookup(each.value, "local_ssd_count", 0)
-    disk_size_gb    = lookup(each.value, "disk_size_gb", 100)
+    disk_size_gb    = lookup(each.value, "disk_size_gb", 50)
     disk_type       = lookup(each.value, "disk_type", "pd-standard")
 
     service_account = lookup(
