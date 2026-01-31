@@ -300,7 +300,11 @@ resource "google_container_node_pool" "pools" {
   # )
 
   #version = google_container_cluster.primary.min_master_version
-  version = var.node_pool_version
+  # version = var.node_pool_version
+  version = lookup(each.value, "auto_upgrade", local.default_auto_upgrade) ? "" : coalesce(
+    lookup(each.value, "version", null),
+    google_container_cluster.primary.min_master_version
+  )  
 
   initial_node_count = lookup(each.value, "autoscaling", true) ? lookup(
     each.value,
