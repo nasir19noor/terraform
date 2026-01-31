@@ -32,8 +32,9 @@ locals {
   master_version          = var.regional ? local.master_version_regional : local.master_version_zonal
 
   // Build a map of maps of node pools from a list of objects
-  node_pool_names = [for np in toset(var.node_pools) : np.name]
-  node_pools      = zipmap(local.node_pool_names, tolist(toset(var.node_pools)))
+  # node_pool_names = [for np in toset(var.node_pools) : np.name]
+  # node_pools      = zipmap(local.node_pool_names, tolist(toset(var.node_pools)))
+  node_pools = length(var.node_pools) > 0 ? { for np in var.node_pools : np.name => np } : {}
 
   release_channel = var.release_channel != null ? [{ channel : var.release_channel }] : []
 

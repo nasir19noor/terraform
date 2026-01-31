@@ -289,7 +289,8 @@ resource "google_container_node_pool" "pools" {
   project  = var.project_id
   location = local.location
   // use node_locations if provided, defaults to cluster level node_locations if not specified
-  node_locations = lookup(each.value, "node_locations", "") != "" ? split(",", each.value["node_locations"]) : null
+  # node_locations = lookup(each.value, "node_locations", "") != "" ? split(",", each.value["node_locations"]) : null
+  node_locations = lookup(each.value, "node_locations", "") != "" && lookup(each.value, "node_locations", "") != null ? split(",", each.value["node_locations"]) : null
 
   cluster = google_container_cluster.primary.name
 
@@ -301,10 +302,15 @@ resource "google_container_node_pool" "pools" {
 
   #version = google_container_cluster.primary.min_master_version
   # version = var.node_pool_version
-  version = lookup(each.value, "auto_upgrade", local.default_auto_upgrade) ? "" : coalesce(
-    lookup(each.value, "version", null),
-    google_container_cluster.primary.min_master_version
-  )  
+  # version = lookup(each.value, "auto_upgrade", local.default_auto_upgrade) ? "" : coalesce(
+  #   lookup(each.value, "version", null),
+  #   google_container_cluster.primary.min_master_version
+  # )  
+  version = lookup(each.value, "auto_upgrade", local.default_auto_upgrade) ? null : lookup(
+    each.value,
+    "version",
+    google_container_cluster.primary.min_master_version,
+  )
 
   initial_node_count = lookup(each.value, "autoscaling", true) ? lookup(
     each.value,
