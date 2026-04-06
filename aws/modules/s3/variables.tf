@@ -76,3 +76,9 @@ variable "error_document" {
   type        = string
   default     = "error.html"
 }
+
+variable "versioning" {
+  description = "Enable versioning on the S3 bucket"
+  type        = bool
+  default     = false
+}

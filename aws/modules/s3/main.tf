@@ -68,3 +68,11 @@ resource "aws_s3_bucket_website_configuration" "website" {
   depends_on = [ aws_s3_bucket_policy.public_read_policy ]
 }
 
+
+resource "aws_s3_bucket_versioning" "this" {
+  bucket = aws_s3_bucket.this.id
+
+  versioning_configuration {
+    status = var.versioning ? "Enabled" : "Suspended"
+  }
+}
